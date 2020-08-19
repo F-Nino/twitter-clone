@@ -1,0 +1,15 @@
+.login {
+  height: 100vh;
+  display: flex;
+  width: auto;
+}
+
+.loginLeftContainer {
+  flex: 1;
+  background-color: var(--twitter-color);
+}
+
+.loginRightContainer {
+  flex: 1;
+  width: 50vw;
+}
