@@ -1,20 +1,43 @@
 import React, { useState } from "react";
 import "../Styles/Login.css";
-import LoginForm from "../Components/LoginForm";
+import "../Styles/LoginForm.css";
+import fb from "../firebase";
 import { Button } from "@material-ui/core";
 import TwitterIcon from "@material-ui/icons/Twitter";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLogin, setShowLogin] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  let history = useHistory();
 
-  const handleLoginSubmit = (e) => {
+  const renderForm = (e) => {
+    e.preventDefault();
+    setUsername("");
+    setPassword("");
+    setShowLogin(!showLogin);
+  };
+
+  const handleLoginSubmit = async (e) => {
     console.log("called");
     e.preventDefault();
-    alert(`name ${username} and password ${password}`);
+    await fb.auth().signInWithEmailAndPassword(username, password);
+
+    history.push("/home");
+  };
+
+  const handleSignUpSubmit = (e) => {
+    e.preventDefault();
+    console.log("sign up called");
+    fb.auth()
+      .createUserWithEmailAndPassword(username, password)
+      .then(() => console.log("created"));
+    alert(
+      `name ${username} and password ${password} and first name ${firstName} and last name ${lastName}`
+    );
   };
 
   return (
@@ -23,7 +46,7 @@ const Login = () => {
       <div className="loginRightContainer">
         {showLogin ? (
           <div className="loginForm">
-            <form onSubmit={handleLoginSubmit}>
+            <form>
               <div className="loginFormHeader">
                 <TwitterIcon className="loginFormTwitterIcon" size="small" />
                 <h2>Welcome</h2>
@@ -48,7 +71,11 @@ const Login = () => {
               </div>
 
               <div className="loginFormButtonContainer">
-                <Button size="medium" className="loginFormButton" type="submit">
+                <Button
+                  size="medium"
+                  className="loginFormButton"
+                  onClick={(e) => handleLoginSubmit(e)}
+                >
                   Log In
                 </Button>
               </div>
@@ -56,7 +83,7 @@ const Login = () => {
                 <Button
                   size="medium"
                   className="loginFormButton"
-                  onClick={() => setShowLogin(!showLogin)}
+                  onClick={(e) => renderForm(e)}
                 >
                   Sign Up
                 </Button>
@@ -114,7 +141,7 @@ const Login = () => {
                 <Button
                   size="medium"
                   className="loginFormButton"
-                  onClick={() => setShowLogin(!showLogin)}
+                  onClick={(e) => handleSignUpSubmit(e)}
                 >
                   Sign Up
                 </Button>

@@ -30,7 +30,7 @@ const Post = ({ displayName, username, varified, text, image, avatar }) => {
         {!image === undefined && (
           <img
             src="https://giphy.com/gifs/the-office-smile-eKDp7xvUdbCrC"
-            alt="image"
+            alt="imageDesc"
           />
         )}
         <div className="postFooter">

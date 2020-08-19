@@ -1,16 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 import fb from "./firebase";
 
-export const AuthContext = React.createContext();
+export const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = (props) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fb.auth().onAuthStateChanged(setUser);
+    fb.auth().onAuthStateChanged((resp) => {
+      console.log("resp", resp);
+      if (resp) {
+        const userData = {
+          email: resp.email,
+          uid: resp.uid,
+        };
+        setUser(userData);
+      } else {
+        setUser(null);
+      }
+    });
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user }} {...props} />;
 };
+export const useAuthDataContext = () => useContext(AuthContext);

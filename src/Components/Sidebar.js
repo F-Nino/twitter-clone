@@ -11,8 +11,12 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { Button } from "@material-ui/core";
 import "../Styles/Sidebar.css";
-
+import fb from "../firebase";
 const Sidebar = () => {
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    fb.auth().signOut();
+  };
   return (
     <div className="sidebar">
       <TwitterIcon className="sidebarTwitterIcon" />
@@ -26,6 +30,14 @@ const Sidebar = () => {
       <SidebarOption text="More" Icon={MoreHorizIcon} />
       <Button variant="outlined" className="sidebarTweet" fullWidth>
         Tweet
+      </Button>
+      <Button
+        variant="outlined"
+        className="sidebarLogOut"
+        fullWidth
+        onClick={(e) => handleLogOut(e)}
+      >
+        Log Out
       </Button>
     </div>
   );
